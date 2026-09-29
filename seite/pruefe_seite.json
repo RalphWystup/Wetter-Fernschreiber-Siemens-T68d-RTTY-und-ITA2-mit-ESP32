@@ -1,0 +1,75 @@
+{
+ "datum": "2026-09-29T21:13:31.474Z",
+ "fassung": "1.0",
+ "befunde": [
+  {
+   "gut": true,
+   "text": "keine Konsolenfehler"
+  },
+  {
+   "gut": true,
+   "text": "Werkzeug vor Text: der Knopf „Drucken“ steht bei 210 px"
+  },
+  {
+   "gut": true,
+   "text": "ITA2 gegen die Nachrechnung aus RTTY_Wetter_20.py: 149 Rahmen, 0 abweichend"
+  },
+  {
+   "gut": true,
+   "text": "Transliteration und Umbruch gleich (2 Abschnitte, längster 63 von 69 Zeichen)"
+  },
+  {
+   "gut": true,
+   "text": "Bitzeiten: 50 Baud, 1 Bit = 20000 µs (Soll 20000), Stopp = 30000 µs (Soll 30000 = 1,5 Bit), Zeichen = 150000 µs (Soll 150000), Streifenbreite 69"
+  },
+  {
+   "gut": true,
+   "text": "dieselben Zeiten wie in der Firmware (20000 / 30000 / 150000 µs)"
+  },
+  {
+   "gut": true,
+   "text": "Echtzeit bei Tempo 1×: 26 Rahmen, Soll 3.90 s, gelaufen 3.77 s (3.2 % Abweichung, Schranke 20 %)"
+  },
+  {
+   "gut": true,
+   "text": "Streifen nach dem Durchlauf: 262 Zeichen, alle 12 erwarteten Stücke des Geräts vorhanden"
+  },
+  {
+   "gut": true,
+   "text": "Streifenspalten: 262 (Umschaltzeichen drucken nichts und rücken nicht vor)"
+  },
+  {
+   "gut": true,
+   "text": "Motorfreigabe nach dem Druck wieder aus (0)"
+  },
+  {
+   "gut": true,
+   "text": "Video eingebettet: 1.87 MB im data:video/mp4 (Soll 1.87 MB, Zeichenzahl 2616598 = Soll 2616598) — der Prüfbrowser hat keinen H.264-Decoder (MEDIA_ERR_SRC_NOT_SUPPORTED), Spielbarkeit mit ffprobe belegt"
+  },
+  {
+   "gut": true,
+   "text": "drei Fotos vom Gerät geladen: 944×2048, 944×2048, 944×2048"
+  },
+  {
+   "gut": true,
+   "text": "Manuskript als Reiter in der Seite, Länge 31305"
+  },
+  {
+   "gut": true,
+   "text": "neutralisiert: 0 Netzadressen in der Seite (Schranke 0), Netzname und Kennwort nur als Platzhalter — gesucht wird der Platzhalter, nie der Wert"
+  },
+  {
+   "gut": true,
+   "text": "Kopfzeile: Fassung 1.0 · 29.09.2026 · Prof. Dr.-Ing. Ralph Wystup M.Sc. — erstellt mit KI u"
+  },
+  {
+   "gut": true,
+   "text": "OLED gezeichnet (277 helle Bildpunkte von 8192, Schranke 150 — vier Zeilen zu 8 Punkten Höhe)"
+  },
+  {
+   "gut": true,
+   "text": "Streifen mit Schrift und Lochung gezeichnet (130629 dunkle Bildpunkte)"
+  }
+ ],
+ "fehler": 0
+}
