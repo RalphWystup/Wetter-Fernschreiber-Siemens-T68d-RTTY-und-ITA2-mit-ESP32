@@ -141,6 +141,23 @@ await p.evaluate(() => document.getElementById('video').scrollIntoView({ block: 
 await p.waitForTimeout(500);
 await p.screenshot({ path: S + 'fernschreiber_geraet.png' });
 
+// 18: der Abruf aus dem Netz — dieselben neun Felder, aber frisch fuer einen anderen Ort.
+// Ohne Netz muss die Seite beim gespeicherten Abruf bleiben und das auch sagen; beides gilt als bestanden.
+{
+  const vorher = await p.evaluate(() => window.LABOR.wetterStand());
+  await p.fill('#ort', 'Hamburg');
+  await p.click('#jetzt');
+  await p.waitForFunction(() => !document.getElementById('jetzt').disabled, { timeout: 40000 }).catch(() => {});
+  const stand = await p.evaluate(() => document.getElementById('netzstand').textContent);
+  const nachher = await p.evaluate(() => window.LABOR.wetterStand());
+  const felder = nachher.roh.split('|').length;
+  const frisch = nachher.roh !== vorher.roh && felder === 9 && /Hamburg/.test(nachher.ort);
+  const ohneNetz = /Kein Abruf möglich/.test(stand) && nachher.roh === vorher.roh;
+  sage(frisch || ohneNetz, frisch
+    ? `Abruf aus dem Netz: ${nachher.ort}, ${felder} Felder, ${nachher.datum} ${nachher.uhr} — „${nachher.roh.slice(0, 44)}…“`
+    : `kein Netz: gespeicherter Abruf bleibt stehen und wird gemeldet`);
+}
+
 await b.close();
 fs.writeFileSync(H + 'pruefe_seite.json', JSON.stringify({ datum: new Date().toISOString(), fassung: V, befunde: BEF, fehler }, null, 1));
 console.log(fehler ? `${fehler} Beanstandung(en)` : 'alles in Ordnung');

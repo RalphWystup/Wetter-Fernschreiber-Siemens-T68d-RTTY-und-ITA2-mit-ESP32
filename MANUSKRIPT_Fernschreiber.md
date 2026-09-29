@@ -468,6 +468,44 @@ Prüfplan `PRUEFPLAN_Seite.md` nennt zu jeder Zeile die Schranke. Die entscheide
 Gegenrechnung: `nachrechnung_ita2.py` lässt die **Firmware selbst** auf dem PC laufen und vergleicht
 Rahmen für Rahmen mit dem, was der Browser erzeugt — abweichen darf kein einziger.
 
+## 10.6 Der wirkliche Wetterbericht für einen gewählten Ort
+
+Die Seite kann mehr als den gespeicherten Abruf abspielen. Ein Feld nimmt einen Ortsnamen auf, ein
+Knopf holt für diesen Ort den **wirklichen, aktuellen** Wetterbericht und druckt ihn auf den Streifen.
+Damit steht dieselbe Kette wie am Gerät, nur mit dem Browser als Rechner: abfragen, zerlegen,
+transliterieren, umbrechen, nach ITA2 setzen, Rahmen für Rahmen bei 50 Baud drucken.
+
+Eine Eigenheit des Dienstes zwingt dabei zu einem Umweg, der hier festgehalten sei, weil er nicht
+offensichtlich ist. Das Gerät fragt `wttr.in` und bekommt auf die Formatzeile hin genau eine Textzeile
+mit neun durch `|` getrennten Feldern zurück. Ein Browser bekommt dieselbe Anfrage als **Bildschirmseite**
+beantwortet: `wttr.in` entscheidet nach der Browserkennung im Kopf der Anfrage, und diese Kennung darf
+eine Seite nicht selbst setzen — der Browser verbietet es. Die Zeile ist aus einer Seite heraus also
+nicht zu bekommen.
+
+Die Seite holt deshalb dieselben neun Größen bei einem Dienst, der aus dem Browser heraus antwortet
+(Ortssuche und Wetterabruf, beide ohne Schlüssel und beide mit `Access-Control-Allow-Origin: *`), und
+setzt sie in **genau das Format**, das das Gerät von `wttr.in` erhält. Ab dieser Zeile läuft alles durch
+denselben Code wie in der Firmware; die Umsetzung ist also nach wie vor die des Geräts.
+
+Zwei der neun Felder rechnet die Seite dabei selbst aus:
+
+* **Der Windpfeil.** Der Dienst liefert die Richtung als Winkel. Die Seite rundet ihn auf ein Achtel
+  des Vollkreises und setzt den zugehörigen Pfeil, den `sanitize_weather_text()` der Firmware dann wie
+  gewohnt in `N`, `NO`, `O`, … übersetzt. Der Pfeil zeigt die Richtung, **aus der** es weht.
+* **Die Mondphase.** Sie steht in keinem der Wetterfelder. Die Seite rechnet das Alter des Mondes aus
+  der Zeit seit einem bekannten Neumond (6. Januar 2000, 18:14 UTC) modulo dem synodischen Monat von
+  29,530 588 853 Tagen und teilt es in acht Abschnitte — dieselben acht Zeichen, die das Gerät kennt.
+  Die Rechnung ist eine Näherung: sie unterstellt gleichförmigen Umlauf und geht deshalb um bis zu
+  etwa einen halben Tag fehl, was für die Angabe „zunehmend“ oder „abnehmend“ reicht.
+
+Datum und Uhrzeit auf dem Kopf des Ausdrucks sind die **Ortszeit des gewählten Ortes**, wie der Dienst
+sie mitliefert. Das Gerät nimmt statt dessen den Zeitstempel aus dem Kopf der Antwort und rechnet ihn
+mit der eigenen Sommerzeitregel auf deutsche Zeit um (Abschnitt 6). Für einen Ort in einer anderen
+Zeitzone ist die Ortszeit die sinnvollere Angabe; der Unterschied ist damit benannt.
+
+Ohne Netz bleibt es beim gespeicherten Abruf. Die Seite sagt das dann auch und arbeitet unverändert
+weiter — sie ist und bleibt eine Datei, die für sich allein läuft.
+
 # 11. Bedienung und Betrieb
 
 ## Auf dem ESP32

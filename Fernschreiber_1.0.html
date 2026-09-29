@@ -41,6 +41,9 @@ label.zeile { display: block; font-size: 13px; margin: 5px 0; }
   <section class="karte">
     <h2 style="margin-top:0">Bedienen</h2>
     <button id="drucken" class="haupt">Drucken</button><button id="wetter">Wetterbericht drucken</button><button id="anhalten">Anhalten</button><button id="leeren">Streifen leeren</button>
+    <label class="zeile">Ort <input id="ort" type="text" value="Künzelsau" size="16">
+      <button id="jetzt">Wetter jetzt holen und drucken</button></label>
+    <p class="small" id="netzstand">Der gespeicherte Abruf vom 10.07.2026 ist eingestellt. „Wetter jetzt holen“ holt die neun Größen für den eingetragenen Ort aus dem Netz, setzt daraus dieselbe Zeile zusammen, die das Gerät von wttr.in bekommt, und druckt sie. Dafür braucht die Seite einmal Netz; alles andere rechnet ohne.</p>
     <label class="zeile">Tempo
       <select id="tempo"><option value="1" selected>1× — Echtzeit, 50 Baud</option><option value="4">4×</option><option value="10">10×</option><option value="40">40×</option></select>
       <span class="small" id="tempoWert"></span></label>
@@ -76,7 +79,7 @@ RYRYRYRYRY 55 73 AR SK</textarea>
 </section>
 <section class="karte" style="margin:0 24px 16px">
   <h2 style="margin-top:0">Der gespeicherte Wetterabruf</h2>
-  <p class="small">Kein Netzzugriff: die Seite trägt eine gespeicherte Antwort von wttr.in — die des Komplettdrucks vom 10.07.2026, den das dritte Foto zeigt. Angefordert wird sie mit der Formatzeile <code id="formatzeile"></code>, die Antwort kommt als eine Zeile mit „|“ zwischen den neun Feldern:</p>
+  <p class="small">Die Seite trägt eine gespeicherte Antwort von wttr.in — die des Komplettdrucks vom 10.07.2026, den das dritte Foto zeigt; ohne Netz rechnet sie damit. Mit „Wetter jetzt holen“ tritt an ihre Stelle ein frischer Abruf für den eingetragenen Ort. Das Gerät fragt wttr.in; wttr.in gibt einem Browser aber die Bildschirmfassung statt dieser einen Zeile, weil es nach der Browserkennung entscheidet und eine Seite die nicht setzen darf. Deshalb holt die Seite dieselben neun Größen bei Open-Meteo (Ortssuche und Wetter, beide ohne Schlüssel) und setzt sie in genau dieses Format; ab da läuft alles durch denselben Code wie in der Firmware. Die Mondphase rechnet sie selbst aus dem Alter seit einem bekannten Neumond, der Windpfeil zeigt die Richtung, aus der es weht. Angefordert wird sie mit der Formatzeile <code id="formatzeile"></code>, die Antwort kommt als eine Zeile mit „|“ zwischen den neun Feldern:</p>
   <pre class="streifentext" id="rohdaten"></pre>
   <p class="small">Daraus baut die Seite denselben Text wie <code>send_komplett()</code>: Kopf mit Datum und Uhrzeit, die neun Felder mit den Beschriftungen aus <code>FIELD_LABELS</code>, Nachspann „RYRYRYRYRY“ und „55 73 AR SK“. Windpfeil und Mondzeichen gehen vorher durch <code>sanitize_weather_text()</code>.</p>
 </section>
@@ -1311,7 +1314,7 @@ Steuerzeichen folgt ohne Lücke das W) und nicht am Gerät gemessen.</li>
 <code>seite/pruefe_seite.mjs</code>.</em></p>
 </article></details>
 <script>
-const FW = {"letters": {"A": "00011", "B": "11001", "C": "01110", "D": "01001", "E": "00001", "F": "01101", "G": "11010", "H": "10100", "I": "00110", "J": "01011", "K": "01111", "L": "10010", "M": "11100", "N": "01100", "O": "11000", "P": "10110", "Q": "10111", "R": "01010", "S": "00101", "T": "10000", "U": "00111", "V": "11110", "W": "10011", "X": "11101", "Y": "10101", "Z": "10001", " ": "00100"}, "figures": {"3": "00001", "-": "00011", "'": "00101", "8": "00110", "7": "00111", "$": "01001", "4": "01010", "\u0007": "01011", ",": "01100", "!": "01101", ":": "01110", "(": "01111", "5": "10000", "+": "10001", ")": "10010", "2": "10011", "#": "10100", "6": "10101", "0": "10110", "1": "10111", "9": "11000", "?": "11001", "&": "11010", ".": "11100", "/": "11101", ";": "11110", " ": "00100"}, "translit": {"Ä": "AE", "Ö": "OE", "Ü": "UE", "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "À": "A", "Á": "A", "Â": "A", "Ã": "A", "È": "E", "É": "E", "Ê": "E", "Ë": "E", "Ì": "I", "Í": "I", "Î": "I", "Ï": "I", "Ò": "O", "Ó": "O", "Ô": "O", "Õ": "O", "Ù": "U", "Ú": "U", "Û": "U", "Ç": "C", "Ñ": "N", "à": "a", "á": "a", "â": "a", "ã": "a", "è": "e", "é": "e", "ê": "e", "ë": "e", "ì": "i", "í": "i", "î": "i", "ï": "i", "ò": "o", "ó": "o", "ô": "o", "õ": "o", "ù": "u", "ú": "u", "û": "u", "ç": "c", "ñ": "n", "–": "-", "—": "-", "…": "...", "°": " GRAD ", "@": "(AT)", "%": " PROZ ", "*": "X", "=": "-", "<": "(", ">": ")", "[": "(", "]": ")", "{": "(", "}": ")", "_": "-", "^": "'", "~": "-", "\\": "/", "|": "/", "\t": "    ", "\n": "\r\n"}, "CODE_LTRS": "11111", "CODE_FIGS": "11011", "CODE_CR": "01000", "CODE_LF": "00010", "zeilenlaenge": 69, "baud": 50, "bit_us": 20000, "stop_us": 30000, "pfeile": {"↗": "NO", "↘": "SO", "↙": "SW", "↖": "NW", "↑": "N", "↓": "S", "→": "O", "←": "W"}, "monde": {"🌑": "NEUMOND", "🌒": "ZUNEHMEND", "🌓": "1.VIERTEL", "🌔": "ZUNEHMEND", "🌕": "VOLLMOND", "🌖": "ABNEHMEND", "🌗": "LETZTES V.", "🌘": "ABNEHMEND"}, "felder": ["TEMP", "GEFUEHLT", "FEUCHTE", "DRUCK", "WIND", "WETTER", "AUFGANG", "UNTERGANG", "MOND"], "format": "%t|%f|%h|%P|%w|%C|%S|%s|%m", "labels": {"TEMP": "TEMP", "GEFUEHLT": "GEFUEHLT", "FEUCHTE": "FEUCHTE", "DRUCK": "DRUCK", "WIND": "WIND", "WETTER": "WETTER", "AUFGANG": "SONNENAUFGANG", "UNTERGANG": "SONNENUNTERGANG", "MOND": "MONDPHASE"}, "wetter_roh": "+28°C|+28°C|30%|1016hPa|↙12km/h|Sunny|05:26:34|21:26:10|🌘", "wetter_datum": "10.07.2026", "wetter_uhr": "16:55:09"};
+const FW = {"letters": {"A": "00011", "B": "11001", "C": "01110", "D": "01001", "E": "00001", "F": "01101", "G": "11010", "H": "10100", "I": "00110", "J": "01011", "K": "01111", "L": "10010", "M": "11100", "N": "01100", "O": "11000", "P": "10110", "Q": "10111", "R": "01010", "S": "00101", "T": "10000", "U": "00111", "V": "11110", "W": "10011", "X": "11101", "Y": "10101", "Z": "10001", " ": "00100"}, "figures": {"3": "00001", "-": "00011", "'": "00101", "8": "00110", "7": "00111", "$": "01001", "4": "01010", "\u0007": "01011", ",": "01100", "!": "01101", ":": "01110", "(": "01111", "5": "10000", "+": "10001", ")": "10010", "2": "10011", "#": "10100", "6": "10101", "0": "10110", "1": "10111", "9": "11000", "?": "11001", "&": "11010", ".": "11100", "/": "11101", ";": "11110", " ": "00100"}, "translit": {"Ä": "AE", "Ö": "OE", "Ü": "UE", "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "À": "A", "Á": "A", "Â": "A", "Ã": "A", "È": "E", "É": "E", "Ê": "E", "Ë": "E", "Ì": "I", "Í": "I", "Î": "I", "Ï": "I", "Ò": "O", "Ó": "O", "Ô": "O", "Õ": "O", "Ù": "U", "Ú": "U", "Û": "U", "Ç": "C", "Ñ": "N", "à": "a", "á": "a", "â": "a", "ã": "a", "è": "e", "é": "e", "ê": "e", "ë": "e", "ì": "i", "í": "i", "î": "i", "ï": "i", "ò": "o", "ó": "o", "ô": "o", "õ": "o", "ù": "u", "ú": "u", "û": "u", "ç": "c", "ñ": "n", "–": "-", "—": "-", "…": "...", "°": " GRAD ", "@": "(AT)", "%": " PROZ ", "*": "X", "=": "-", "<": "(", ">": ")", "[": "(", "]": ")", "{": "(", "}": ")", "_": "-", "^": "'", "~": "-", "\\": "/", "|": "/", "\t": "    ", "\n": "\r\n"}, "CODE_LTRS": "11111", "CODE_FIGS": "11011", "CODE_CR": "01000", "CODE_LF": "00010", "zeilenlaenge": 69, "baud": 50, "bit_us": 20000, "stop_us": 30000, "pfeile": {"↗": "NO", "↘": "SO", "↙": "SW", "↖": "NW", "↑": "N", "↓": "S", "→": "O", "←": "W"}, "monde": {"🌑": "NEUMOND", "🌒": "ZUNEHMEND", "🌓": "1.VIERTEL", "🌔": "ZUNEHMEND", "🌕": "VOLLMOND", "🌖": "ABNEHMEND", "🌗": "LETZTES V.", "🌘": "ABNEHMEND"}, "felder": ["TEMP", "GEFUEHLT", "FEUCHTE", "DRUCK", "WIND", "WETTER", "AUFGANG", "UNTERGANG", "MOND"], "format": "%t|%f|%h|%P|%w|%C|%S|%s|%m", "labels": {"TEMP": "TEMP", "GEFUEHLT": "GEFUEHLT", "FEUCHTE": "FEUCHTE", "DRUCK": "DRUCK", "WIND": "WIND", "WETTER": "WETTER", "AUFGANG": "SONNENAUFGANG", "UNTERGANG": "SONNENUNTERGANG", "MOND": "MONDPHASE"}, "wetter_roh": "+28°C|+28°C|30%|1016hPa|↙12km/h|Sunny|05:26:34|21:26:10|🌘", "wetter_datum": "10.07.2026", "wetter_uhr": "16:55:09", "wetter_ort": "Kuenzelsau"};
 
 // =============================================================================================
 //  Die ITA2-Umsetzung — Zeile fuer Zeile aus RTTY_Wetter_20.py (die Tabellen sind aus der
@@ -1398,10 +1401,85 @@ function wetterFelder() {
 
 // send_komplett(): derselbe Aufbau wie in der Firmware, mit DATUM und ZEIT aus dem Abruf
 function wetterText() {
-  const w = wetterFelder(), z = [`WETTER KUENZELSAU AM ${FW.wetter_datum} UM ${FW.wetter_uhr}`, ''];
+  const w = wetterFelder(), z = [`WETTER ${FW.wetter_ort.toUpperCase()} AM ${FW.wetter_datum} UM ${FW.wetter_uhr}`, ''];
   for (const k in FW.labels) z.push(`${FW.labels[k]}: ${sanitize(w[k])}`);
   z.push('', 'RYRYRYRYRY', '55 73 AR SK');
   return z.join('\n');
+}
+
+// get_weather_all() im Browser: derselbe Dienst, dieselbe Formatzeile, dieselbe Zerlegung wie in der
+// Firmware. Die Uhr kommt wie am Geraet aus dem Date-Kopf der Antwort (bei CORS ist er lesbar) und wird
+// mit derselben Regel auf MEZ/MESZ gerechnet: Sommerzeit vom letzten Sonntag im Maerz bis zum letzten
+// im Oktober. Schlaegt der Abruf fehl, bleibt der gespeicherte Abruf stehen — die Seite laeuft ohne Netz.
+function _letzterSonntag(jahr, monat) {          // wie _letzter_sonntag() in der Firmware
+  const tage = new Date(Date.UTC(jahr, monat, 0)).getUTCDate();
+  for (let d = tage; d > 0; d--) if (new Date(Date.UTC(jahr, monat - 1, d)).getUTCDay() === 0) return d;
+  return tage;
+}
+function _istSommerzeit(u) {                      // u = Date in UTC
+  const j = u.getUTCFullYear(), m = u.getUTCMonth() + 1, d = u.getUTCDate(), h = u.getUTCHours();
+  if (m < 3 || m > 10) return false;
+  if (m > 3 && m < 10) return true;
+  if (m === 3) { const s = _letzterSonntag(j, 3); return d > s || (d === s && h >= 1); }
+  const s = _letzterSonntag(j, 10); return d < s || (d === s && h < 1);
+}
+function _zweistellig(n) { return String(n).padStart(2, '0'); }
+
+// WMO-Wetterschluessel in die kurzen englischen Woerter, die auch wttr.in druckt (%C).
+const _WMO = {0:'Clear', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast', 45:'Fog', 48:'Rime fog',
+  51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle', 56:'Freezing drizzle', 57:'Freezing drizzle',
+  61:'Light rain', 63:'Rain', 65:'Heavy rain', 66:'Freezing rain', 67:'Freezing rain',
+  71:'Light snow', 73:'Snow', 75:'Heavy snow', 77:'Snow grains', 80:'Light showers', 81:'Showers',
+  82:'Heavy showers', 85:'Snow showers', 86:'Snow showers', 95:'Thunderstorm', 96:'Thunderstorm',
+  99:'Thunderstorm'};
+// Der Pfeil zeigt die Himmelsrichtung, aus der es weht; die Firmware macht daraus in sanitize() NO, SO, ...
+const _PFEIL = ['↑','↗','→','↘','↓','↙','←','↖'];
+// Mondphase aus dem Alter seit einem bekannten Neumond (6.1.2000 18:14 UTC), synodischer Monat 29,530588853 d.
+function _mond(datum) {
+  const alter = (((datum.getTime() - Date.UTC(2000, 0, 6, 18, 14)) / 86400000) % 29.530588853 + 29.530588853) % 29.530588853;
+  return ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][Math.floor(alter / 29.530588853 * 8) % 8];
+}
+function _vz(x) { return (x >= 0 ? '+' : '') + Math.round(x); }
+
+// Der Abruf im Browser. Das Gerät fragt wttr.in; wttr.in liefert einem Browser aber die Bildschirmfassung
+// statt der einen Textzeile (es entscheidet nach der Browserkennung, die eine Seite nicht setzen darf).
+// Deshalb holt die Seite dieselben neun Groessen bei Open-Meteo und setzt daraus genau dieselbe Zeile
+// zusammen, die das Geraet von wttr.in bekommt — ab da laeuft alles durch denselben Code wie in der Firmware.
+// Schlaegt der Abruf fehl, bleibt der gespeicherte Abruf stehen; die Seite arbeitet weiter ohne Netz.
+async function wetterHolen(ort) {
+  const o = (ort || '').trim() || FW.wetter_ort;
+  const g = await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=de&name='
+                        + encodeURIComponent(o), { cache: 'no-store' });
+  if (!g.ok) throw new Error('Ortssuche antwortet mit ' + g.status);
+  const gj = await g.json();
+  if (!gj.results || !gj.results.length) throw new Error('Ort nicht gefunden: ' + o);
+  const s = gj.results[0];
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + s.latitude + '&longitude=' + s.longitude
+    + '&current=temperature_2m,apparent_temperature,relative_humidity_2m,surface_pressure,'
+    + 'wind_speed_10m,wind_direction_10m,weather_code&daily=sunrise,sunset&timezone=auto&forecast_days=1';
+  const a = await fetch(url, { cache: 'no-store' });
+  if (!a.ok) throw new Error('Wetterdienst antwortet mit ' + a.status);
+  const d = await a.json(), c = d.current;
+  const pfeil = _PFEIL[Math.round(((c.wind_direction_10m % 360) + 360) % 360 / 45) % 8];
+  const roh = [
+    _vz(c.temperature_2m) + '°C',
+    _vz(c.apparent_temperature) + '°C',
+    Math.round(c.relative_humidity_2m) + '%',
+    Math.round(c.surface_pressure) + 'hPa',
+    pfeil + Math.round(c.wind_speed_10m) + 'km/h',
+    (_WMO[c.weather_code] || ('Code ' + c.weather_code)),
+    (d.daily.sunrise[0].split('T')[1] + ':00'),
+    (d.daily.sunset[0].split('T')[1] + ':00'),
+    _mond(new Date(c.time + ':00Z')),
+  ].join('|');
+  if (roh.split('|').length !== FW.felder.length)
+    throw new Error('Zeile hat ' + roh.split('|').length + ' statt ' + FW.felder.length + ' Feldern');
+  const [tag, uhrzeit] = c.time.split('T');
+  const [jj, mm, tt] = tag.split('-');
+  FW.wetter_roh = roh; FW.wetter_datum = `${tt}.${mm}.${jj}`; FW.wetter_uhr = uhrzeit + ':00';
+  FW.wetter_ort = s.name; STREIFEN.uhr = FW.wetter_uhr;
+  return { roh, datum: FW.wetter_datum, uhr: FW.wetter_uhr, ort: s.name,
+           land: s.country || '', hoehe: s.elevation, aus_dem_netz: true };
 }
 
 // =============================================================================================
@@ -1667,6 +1745,19 @@ window.addEventListener('DOMContentLoaded', () => {
   $('eingabe').addEventListener('input', neuUmsetzen);
   $('drucken').onclick = () => drucke($('eingabe').value, false);
   $('wetter').onclick = () => { $('eingabe').value = wetterText(); neuUmsetzen(); drucke(wetterText(), true); };
+  $('jetzt').onclick = async () => {
+    const n = $('netzstand'), knopf = $('jetzt');
+    knopf.disabled = true; n.textContent = 'Frage wttr.in nach „' + $('ort').value.trim() + '“ …';
+    try {
+      const r = await wetterHolen($('ort').value);
+      $('rohdaten').textContent = FW.wetter_roh;
+      n.textContent = `Frischer Abruf für ${r.ort}${r.land ? ', ' + r.land : ''} — Ortszeit ${r.datum} ${r.uhr}. Die neun Felder stehen unten als Zeile, wie sie das Gerät von wttr.in bekommt.`;
+      $('eingabe').value = wetterText(); neuUmsetzen(); drucke(wetterText(), true);
+    } catch (f) {
+      n.textContent = 'Kein Abruf möglich (' + f.message + '). Es bleibt beim gespeicherten Abruf vom '
+        + FW.wetter_datum + ' — die Seite arbeitet weiter ohne Netz.';
+    } finally { knopf.disabled = false; }
+  };
   $('anhalten').onclick = anhalten;
   $('leeren').onclick = () => { STREIFEN.spalten = []; ZEITFENSTER = []; streifenZeichnen(); frameZeichnen(); $('stand').textContent = 'Streifen leer.'; };
   $('lochung').addEventListener('change', streifenZeichnen);
@@ -1680,6 +1771,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // einen Getter beim Zuweisen einmal auslesen und damit einfrieren.
   window.LABOR = {
     rahmen, expand, wrapLines, sanitize, wetterFelder, wetterText, drucke, anhalten,
+    wetterHolen, wetterStand: () => ({ ort: FW.wetter_ort, roh: FW.wetter_roh, datum: FW.wetter_datum, uhr: FW.wetter_uhr }),
     bitzeiten: { baud: BAUD, bit_us: BIT_US, stop_us: STOP_US, zeichen_us: ZEICHEN_US, zeilenlaenge: ZEILENLAENGE },
     letzt: () => LETZT, streifen: () => streifenText(),
     spalten: () => STREIFEN.spalten.length, motor: () => STREIFEN.motor,

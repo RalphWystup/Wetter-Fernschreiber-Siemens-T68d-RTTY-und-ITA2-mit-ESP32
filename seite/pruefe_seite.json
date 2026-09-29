@@ -1,5 +1,5 @@
 {
- "datum": "2026-09-29T21:13:31.474Z",
+ "datum": "2026-09-29T21:51:05.125Z",
  "fassung": "1.0",
  "befunde": [
   {
@@ -69,6 +69,10 @@
   {
    "gut": true,
    "text": "Streifen mit Schrift und Lochung gezeichnet (130629 dunkle Bildpunkte)"
+  },
+  {
+   "gut": true,
+   "text": "Abruf aus dem Netz: Hamburg, 9 Felder, 29.09.2026 23:45:00 — „+18°C|+16°C|61%|1020hPa|↘12km/h|Overcast|07:…“"
   }
  ],
  "fehler": 0
