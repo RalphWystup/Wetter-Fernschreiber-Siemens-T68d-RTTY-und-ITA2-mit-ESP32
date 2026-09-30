@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Wenn Sie diese Arbeit verwenden, zitieren Sie sie bitte wie folgt."
+title: "Wetter-Fernschreiber Siemens T68d"
+abstract: "Der Wetterbericht auf einem Streifenschreiber von 1959: RTTY und ITA2 bei 50 Baud. Die Seite druckt das wirkliche Wetter für einen Ort, den man eingibt."
+type: software
+authors:
+  - family-names: Wystup
+    given-names: Ralph
+    name-particle: ""
+    name-suffix: "Prof. Dr.-Ing., M.Sc."
+license: MIT
+url: "https://ralphwystup.github.io/Wetter-Fernschreiber-Siemens-T68d-RTTY-und-ITA2-mit-ESP32/"
+repository-code: "https://github.com/RalphWystup/Wetter-Fernschreiber-Siemens-T68d-RTTY-und-ITA2-mit-ESP32"
+date-released: "2026-09-30"
+keywords:
+  - Fernschreiber
+  - RTTY
+  - ITA2
+  - Baudot
+  - Siemens T68d
+  - ESP32
