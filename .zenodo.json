@@ -1,0 +1,35 @@
+{
+  "title": "Wetter-Fernschreiber Siemens T68d",
+  "description": "<p>Der Wetterbericht auf einem Streifenschreiber von 1959: RTTY und ITA2 bei 50 Baud. Die Seite druckt das wirkliche Wetter für einen Ort, den man eingibt.</p><p>Die Arbeit besteht aus einem Manuskript, das die Herleitung geschlossen zeigt, einer Seite, die im Browser rechnet und ohne Netz läuft, einem Prüfplan mit einer Schranke je Kriterium, und den zugehörigen Programmen und Messdaten. Seite: <a href=\"https://ralphwystup.github.io/Wetter-Fernschreiber-Siemens-T68d-RTTY-und-ITA2-mit-ESP32/\">https://ralphwystup.github.io/Wetter-Fernschreiber-Siemens-T68d-RTTY-und-ITA2-mit-ESP32/</a> · Übersicht aller Arbeiten: <a href=\"https://ralphwystup.github.io/\">https://ralphwystup.github.io/</a></p>",
+  "creators": [
+    {
+      "name": "Wystup, Ralph"
+    }
+  ],
+  "upload_type": "software",
+  "license": "MIT",
+  "access_right": "open",
+  "language": "deu",
+  "keywords": [
+    "Fernschreiber",
+    "RTTY",
+    "ITA2",
+    "Baudot",
+    "Siemens T68d",
+    "ESP32"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://ralphwystup.github.io/Wetter-Fernschreiber-Siemens-T68d-RTTY-und-ITA2-mit-ESP32/",
+      "relation": "isIdenticalTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://ralphwystup.github.io/",
+      "relation": "isPartOf",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Erstellt mit KI und Agent (Claude Code, Anthropic). Alle Zahlen gerechnet oder gemessen, jede Rechnung von Hand nachvollziehbar."
+}
